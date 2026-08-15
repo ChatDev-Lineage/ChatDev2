@@ -20,3 +20,10 @@ state/artifacts/*/
 logs/local_devall_app.stderr.log
 logs/local_devall_app.stdout.log
 logs/server.log
+# Project Specific
+logs/
+node_modules/
+data/
+temp/
+WareHouse/
+

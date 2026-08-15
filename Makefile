@@ -3,23 +3,25 @@
 # ==============================================================================
 
 .PHONY: dev
-dev: server client ## Run both backend and frontend development servers
+dev: ## Run both backend and frontend development servers
+	@$(MAKE) -j2 server client
+
 
 .PHONY: server
 server: ## Start the backend server in the background
 	@echo "Starting server in background..."
-	@uv run python server_main.py --port 6400 --reload &
+	@uv run python server_main.py --port 6400 &
 
 .PHONY: client
 client: ## Start the frontend development server
-	@cd frontend && VITE_API_BASE_URL=http://localhost:6400 npm run dev
+	@cd frontend && npx cross-env VITE_API_BASE_URL=http://localhost:6400 npm run dev
 
 .PHONY: stop
-stop: ## Stop backend and frontend servers
+stop: ## Stop backend and frontend servers cross-platform
 	@echo "Stopping backend server (port 6400)..."
-	@lsof -t -i:6400 | xargs kill -9 2>/dev/null || echo "Backend server not found on port 6400."
+	@npx kill-port 6400
 	@echo "Stopping frontend server (port 5173)..."
-	@lsof -t -i:5173 | xargs kill -9 2>/dev/null || echo "Frontend server not found on port 5173."
+	@npx kill-port 5173
 
 # ==============================================================================
 # Tools & Maintenance
@@ -87,4 +89,23 @@ status-gamedev-compact: ## Print the compact automation_summary contract for the
 
 .PHONY: help
 help: ## Display this help message
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@uv run python -c "import re; \
+	p=r'$(firstword $(MAKEFILE_LIST))'.strip(); \
+	[print(f'{m[0]:<20} {m[1]}') for m in re.findall(r'^([a-zA-Z_-]+):.*?## (.*)$$', open(p, encoding='utf-8').read(), re.M)]" | sort
+
+# ==============================================================================
+# Quality Checks
+# ==============================================================================
+
+.PHONY: check-backend
+check-backend: ## Run backend quality checks (tests + linting)
+	@$(MAKE) backend-tests
+	@$(MAKE) backend-lint
+
+.PHONY: backend-tests
+backend-tests: ## Run backend tests
+	@uv run pytest -v
+
+.PHONY: backend-lint
+backend-lint: ## Run backend linting
+	@uvx ruff check .

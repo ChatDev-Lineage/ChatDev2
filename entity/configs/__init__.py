@@ -10,6 +10,7 @@ from .node.memory import (
     EmbeddingConfig,
     FileMemoryConfig,
     FileSourceConfig,
+    Mem0MemoryConfig,
     MemoryAttachmentConfig,
     MemoryStoreConfig,
     SimpleMemoryConfig,
@@ -20,12 +21,14 @@ from .node.subgraph import SubgraphConfig
 from .node.node import EdgeLink, Node
 from .node.passthrough import PassthroughConfig
 from .node.python_runner import PythonRunnerConfig
+from .node.skills import AgentSkillsConfig
 from .node.thinking import ReflectionThinkingConfig, ThinkingConfig
 from .node.tooling import FunctionToolConfig, McpLocalConfig, McpRemoteConfig, ToolingConfig
 
 __all__ = [
     "AgentConfig",
     "AgentRetryConfig",
+    "AgentSkillsConfig",
     "BaseConfig",
     "ConfigError",
     "DesignConfig",
@@ -41,6 +44,7 @@ __all__ = [
     "FunctionToolConfig",
     "GraphDefinition",
     "HumanConfig",
+    "Mem0MemoryConfig",
     "MemoryAttachmentConfig",
     "MemoryStoreConfig",
     "McpLocalConfig",

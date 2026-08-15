@@ -8,20 +8,20 @@
           <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button> -->
-      <h1 class="workflow-name">{{ workflowName }}</h1>
+      <h1 class="workflow-name">{{ currentWorkflowName }}</h1>
     </div>
     
     <div class="content">
       <!-- YAML Editor Tab -->
       <div v-if="activeTab === 'yaml'" class="yaml-editor">
         <div v-if="yamlParseError" class="yaml-error">
-          YAML Parse Error: {{ yamlParseError }}
+          {{ $t('workflow_view.yaml_parse_error') }} {{ yamlParseError }}
         </div>
         <textarea 
           v-model="yamlTextString" 
           class="yaml-textarea"
           :class="{ 'yaml-error-border': yamlParseError }"
-          placeholder="Loading YAML content..."
+          :placeholder="$t('workflow_view.loading_yaml')"
           readonly
         ></textarea>
       </div>
@@ -92,7 +92,7 @@
                   class="context-menu-item"
                   @click.stop="() => { hideContextMenu(); openCreateNodeModal(); }"
                 >
-                  Create Node
+                  {{ $t('workflow_view.create_node') }}
                 </div>
               </RichTooltip>
               <div
@@ -100,7 +100,7 @@
                 class="context-menu-item"
                 @click.stop="() => { hideContextMenu(); openCreateNodeModal(); }"
               >
-                Create Node
+                {{ $t('workflow_view.create_node') }}
               </div>
             </template>
 
@@ -111,7 +111,7 @@
                   class="context-menu-item"
                   @click.stop="() => { hideContextMenu(); onCopyNodeFromContext(); }"
                 >
-                  Copy Node
+                  {{ $t('workflow_view.copy_node') }}
                 </div>
               </RichTooltip>
               <div
@@ -119,14 +119,14 @@
                 class="context-menu-item"
                 @click.stop="() => { hideContextMenu(); onCopyNodeFromContext(); }"
               >
-                Copy Node
+                {{ $t('workflow_view.copy_node') }}
               </div>
               <RichTooltip v-if="shouldShowTooltip" :content="helpContent.contextMenu.deleteNode" placement="right">
                 <div
                   class="context-menu-item"
                   @click.stop="() => { hideContextMenu(); onDeleteNodeFromContext(); }"
                 >
-                  Delete Node
+                  {{ $t('workflow_view.delete_node') }}
                 </div>
               </RichTooltip>
               <div
@@ -134,7 +134,7 @@
                 class="context-menu-item"
                 @click.stop="() => { hideContextMenu(); onDeleteNodeFromContext(); }"
               >
-                Delete Node
+                {{ $t('workflow_view.delete_node') }}
               </div>
             </template>
 
@@ -145,7 +145,7 @@
                   class="context-menu-item"
                   @click.stop="() => { hideContextMenu(); onDeleteEdgeFromContext(); }"
                 >
-                  Delete Edge
+                  {{ $t('workflow_view.delete_edge') }}
                 </div>
               </RichTooltip>
               <div
@@ -153,7 +153,7 @@
                 class="context-menu-item"
                 @click.stop="() => { hideContextMenu(); onDeleteEdgeFromContext(); }"
               >
-                Delete Edge
+                {{ $t('workflow_view.delete_edge') }}
               </div>
             </template>
           </div>
@@ -163,43 +163,42 @@
 
     <div class="tabs">
       <div class="tab-buttons">
-        <button 
+        <button
           :class="['tab', { active: activeTab === 'graph' }]"
           @click="activeTab = 'graph'"
         >
-          Workflow Graph
+          {{ $t('workflow_view.workflow_graph') }}
         </button>
-        <button 
+        <button
           :class="['tab', { active: activeTab === 'yaml' }]"
           @click="activeTab = 'yaml'"
         >
-          YAML Configuration
-        </button>
-      </div>
+          {{ $t('workflow_view.yaml_configuration') }}
+        </button>      </div>
       <div v-if="activeTab === 'graph'" class="editor-actions">
         <RichTooltip v-if="shouldShowTooltip" :content="helpContent.contextMenu.createNodeButton" placement="bottom">
           <button @click="openCreateNodeModal" class="glass-button">
-            <span>Create Node</span>
+            <span>{{ $t('workflow_view.create_node') }}</span>
           </button>
         </RichTooltip>
         <button v-else @click="openCreateNodeModal" class="glass-button">
-          <span>Create Node</span>
+          <span>{{ $t('workflow_view.create_node') }}</span>
         </button>
         <RichTooltip v-if="shouldShowTooltip" :content="helpContent.contextMenu.configureGraph" placement="bottom">
           <button @click="openConfigureGraphModal" class="glass-button">
-            <span>Configure Graph</span>
+            <span>{{ $t('workflow_view.configure_graph') }}</span>
           </button>
         </RichTooltip>
         <button v-else @click="openConfigureGraphModal" class="glass-button">
-          <span>Configure Graph</span>
+          <span>{{ $t('workflow_view.configure_graph') }}</span>
         </button>
         <RichTooltip v-if="shouldShowTooltip" :content="helpContent.contextMenu.launch" placement="bottom">
           <button @click="goToLaunch" class="launch-button-primary">
-            <span>Launch</span>
+            <span>{{ $t('workflow_view.launch') }}</span>
           </button>
         </RichTooltip>
         <button v-else @click="goToLaunch" class="launch-button-primary">
-          <span>Launch</span>
+          <span>{{ $t('workflow_view.launch') }}</span>
         </button>
         
         <div
@@ -218,25 +217,25 @@
           <transition name="fade">
             <div v-if="showMenu" class="menu-dropdown">
               <RichTooltip v-if="shouldShowTooltip" :content="helpContent.contextMenu.renameWorkflow" placement="left">
-                <div @click="openRenameWorkflowModal" class="menu-item">Rename Workflow</div>
+                <div @click="openRenameWorkflowModal" class="menu-item">{{ $t('workflow_view.rename_workflow') }}</div>
               </RichTooltip>
-              <div v-else @click="openRenameWorkflowModal" class="menu-item">Rename Workflow</div>
+              <div v-else @click="openRenameWorkflowModal" class="menu-item">{{ $t('workflow_view.rename_workflow') }}</div>
               <RichTooltip v-if="shouldShowTooltip" :content="helpContent.contextMenu.copyWorkflow" placement="left">
-                <div @click="openCopyWorkflowModal" class="menu-item">Copy Workflow</div>
+                <div @click="openCopyWorkflowModal" class="menu-item">{{ $t('workflow_view.copy_workflow') }}</div>
               </RichTooltip>
-              <div v-else @click="openCopyWorkflowModal" class="menu-item">Copy Workflow</div>
+              <div v-else @click="openCopyWorkflowModal" class="menu-item">{{ $t('workflow_view.copy_workflow') }}</div>
               <RichTooltip v-if="shouldShowTooltip" :content="helpContent.contextMenu.manageVariables" placement="left">
-                <div @click="openManageVarsModal" class="menu-item">Manage Variables</div>
+                <div @click="openManageVarsModal" class="menu-item">{{ $t('workflow_view.manage_variables') }}</div>
               </RichTooltip>
-              <div v-else @click="openManageVarsModal" class="menu-item">Manage Variables</div>
+              <div v-else @click="openManageVarsModal" class="menu-item">{{ $t('workflow_view.manage_variables') }}</div>
               <RichTooltip v-if="shouldShowTooltip" :content="helpContent.contextMenu.manageMemories" placement="left">
-                <div @click="openManageMemoriesModal" class="menu-item">Manage Memories</div>
+                <div @click="openManageMemoriesModal" class="menu-item">{{ $t('workflow_view.manage_memories') }}</div>
               </RichTooltip>
-              <div v-else @click="openManageMemoriesModal" class="menu-item">Manage Memories</div>
+              <div v-else @click="openManageMemoriesModal" class="menu-item">{{ $t('workflow_view.manage_memories') }}</div>
               <RichTooltip v-if="shouldShowTooltip" :content="helpContent.contextMenu.createEdge" placement="left">
-                <div @click="openCreateEdgeModal" class="menu-item">Create Edge</div>
+                <div @click="openCreateEdgeModal" class="menu-item">{{ $t('workflow_view.create_edge') }}</div>
               </RichTooltip>
-              <div v-else @click="openCreateEdgeModal" class="menu-item">Create Edge</div>
+              <div v-else @click="openCreateEdgeModal" class="menu-item">{{ $t('workflow_view.create_edge') }}</div>
             </div>
           </transition>
         </div>
@@ -249,7 +248,7 @@
     v-if="showDynamicFormGenerator"
     :breadcrumbs="formGeneratorBreadcrumbs"
     :recursive="formGeneratorRecursive"
-    :workflow-name="workflowName"
+    :workflow-name="currentWorkflowName"
     :initial-yaml="formGeneratorInitialYaml ?? yamlContent"
     :initial-form-data="formGeneratorInitialFormData"
     :mode="formGeneratorMode"
@@ -264,7 +263,7 @@
   <div v-if="showRenameModal" class="modal-overlay" @click.self="closeRenameModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">Rename Workflow</h3>
+        <h3 class="modal-title">{{ $t('workflow_view.rename_workflow') }}</h3>
         <button @click="closeRenameModal" class="close-button">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -273,20 +272,20 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="rename-workflow-name" class="form-label">Workflow Name</label>
+          <label for="rename-workflow-name" class="form-label">{{ $t('workflow_view.workflow_name') }}</label>
           <input
             id="rename-workflow-name"
             v-model="renameWorkflowName"
             type="text"
             class="form-input"
-            placeholder="Enter new workflow name"
+            :placeholder="$t('workflow_view.enter_new_name')"
             @keyup.enter="handleRenameSubmit"
           />
         </div>
       </div>
       <div class="modal-footer">
-        <button @click="closeRenameModal" class="cancel-button">Cancel</button>
-        <button @click="handleRenameSubmit" class="submit-button" :disabled="!renameWorkflowName.trim()">Submit</button>
+        <button @click="closeRenameModal" class="cancel-button">{{ $t('common.cancel') }}</button>
+        <button @click="handleRenameSubmit" class="submit-button" :disabled="!renameWorkflowName.trim()">{{ $t('common.submit') }}</button>
       </div>
     </div>
   </div>
@@ -317,7 +316,7 @@
       </div>
       <div class="modal-footer">
         <button @click="closeCopyModal" class="cancel-button">Cancel</button>
-        <button @click="handleCopySubmit" class="submit-button" :disabled="!copyWorkflowName.trim()">Submit</button>
+        <button @click="handleCopySubmit" class="submit-button" :disabled="!copyWorkflowName.trim()">{{ $t('common.submit') }}</button>
       </div>
     </div>
   </div>
@@ -326,6 +325,7 @@
 <script setup>
 import { ref, watch, nextTick, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { VueFlow, useVueFlow, MarkerType } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
@@ -352,6 +352,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['refresh-workflows'])
 const router = useRouter()
+const { t } = useI18n()
 const { toObject, fromObject, fitView, getViewport } = useVueFlow()
 
 const vueflowContainerRef = ref(null)
@@ -365,7 +366,7 @@ const onNodeLeave = (_nodeId) => {
   hoveredNodeId.value = null
 }
 
-const workflowName = ref('')
+const currentWorkflowName = ref('')
 const activeTab = ref('graph')
 const yamlContent = ref({}) // YAML object
 const yamlTextString = ref('') // YAML string
@@ -568,11 +569,11 @@ const dimStartNode = () => {
 // Persist an updated YAML snapshot back to the server and refresh local state
 const persistYamlSnapshot = async (snapshot) => {
   try {
-    if (!workflowName.value) {
+    if (!currentWorkflowName.value) {
       return false
     }
     const yamlString = yaml.dump(snapshot ?? {})
-    const result = await updateYaml(workflowName.value, yamlString)
+    const result = await updateYaml(currentWorkflowName.value, yamlString)
     if (!result?.success) {
       console.error('Failed to update workflow YAML:', result?.message || result?.detail)
       return false
@@ -602,29 +603,30 @@ const deleteNodeById = async (nodeId) => {
   if (!nodeId) {
     return
   }
-  const snapshot = snapshotYamlContent()
-  if (!snapshot?.graph) {
+  const source = yamlContent.value
+  if (!source?.graph) {
     return
   }
-  const nodesArr = Array.isArray(snapshot.graph.nodes) ? snapshot.graph.nodes : []
-  const edgesArr = Array.isArray(snapshot.graph.edges) ? snapshot.graph.edges : []
+  const sourceGraph = source.graph
+  const nodesArr = Array.isArray(sourceGraph.nodes) ? sourceGraph.nodes : []
+  const edgesArr = Array.isArray(sourceGraph.edges) ? sourceGraph.edges : []
 
   // Remove the node and its related edges
   const nextNodes = nodesArr.filter(node => node?.id !== nodeId)
   const nextEdges = edgesArr.filter(edge => edge?.from !== nodeId && edge?.to !== nodeId)
   
   // Remove node ID from graph.start/end
-  const nextStart = Array.isArray(snapshot.graph.start)
-    ? snapshot.graph.start.filter(id => id !== nodeId)
-    : snapshot.graph.start
-  const nextEnd = Array.isArray(snapshot.graph.end)
-    ? snapshot.graph.end.filter(id => id !== nodeId)
-    : snapshot.graph.end
+  const nextStart = Array.isArray(sourceGraph.start)
+    ? sourceGraph.start.filter(id => id !== nodeId)
+    : sourceGraph.start
+  const nextEnd = Array.isArray(sourceGraph.end)
+    ? sourceGraph.end.filter(id => id !== nodeId)
+    : sourceGraph.end
 
   const nextSnapshot = {
-    ...snapshot,
+    ...source,
     graph: {
-      ...snapshot.graph,
+      ...sourceGraph,
       nodes: nextNodes,
       edges: nextEdges,
       start: nextStart,
@@ -647,13 +649,14 @@ const deleteEdgeByEndpoints = async (fromId, toId) => {
   if (!fromId || !toId) {
     return
   }
-  const snapshot = snapshotYamlContent()
-  if (!snapshot?.graph || !Array.isArray(snapshot.graph.edges)) {
+  const source = yamlContent.value
+  if (!source?.graph || !Array.isArray(source.graph.edges)) {
     return
   }
+  const sourceGraph = source.graph
 
   let removed = false
-  const nextEdges = snapshot.graph.edges.filter(edge => {
+  const nextEdges = sourceGraph.edges.filter(edge => {
     if (!removed && edge?.from === fromId && edge?.to === toId) {
       removed = true
       return false
@@ -662,11 +665,11 @@ const deleteEdgeByEndpoints = async (fromId, toId) => {
   })
 
   // Delete from .start if edge is from Start Node
-  let nextStart = snapshot.graph.start
+  let nextStart = sourceGraph.start
   if (fromId === START_NODE_ID) {
-    nextStart = Array.isArray(snapshot.graph.start)
-      ? snapshot.graph.start.filter(id => id !== toId)
-      : snapshot.graph.start
+    nextStart = Array.isArray(sourceGraph.start)
+      ? sourceGraph.start.filter(id => id !== toId)
+      : sourceGraph.start
 
     // Empty start node array is not allowed
     const startArray = Array.isArray(nextStart) ? nextStart : []
@@ -677,9 +680,9 @@ const deleteEdgeByEndpoints = async (fromId, toId) => {
   }
 
   const nextSnapshot = {
-    ...snapshot,
+    ...source,
     graph: {
-      ...snapshot.graph,
+      ...sourceGraph,
       edges: nextEdges,
       start: nextStart
     }
@@ -726,8 +729,8 @@ const initializeWorkflow = async (name) => {
   if (!name) {
     return
   }
-  workflowName.value = name
-  console.log('Workflow initialized: ', workflowName.value)
+  currentWorkflowName.value = name
+  console.log('Workflow initialized: ', currentWorkflowName.value)
   await loadYamlFile()
   loadAndSyncVueFlowGraph()
   await nextTick()
@@ -761,7 +764,7 @@ watch(activeTab, async (newTab) => {
 const saveVueFlowGraph = async () => {
   try {
     const flowObj = toObject()
-    const key = workflowName.value
+    const key = currentWorkflowName.value
     const result = await postVuegraphs({
       filename: key,
       content: JSON.stringify(flowObj)
@@ -780,7 +783,7 @@ const saveVueFlowGraph = async () => {
 
 const loadAndSyncVueFlowGraph = async () => {
   try {
-    const key = workflowName.value
+    const key = currentWorkflowName.value
     const result = await fetchVueGraph(key)
 
     if(result?.success === true) {
@@ -822,10 +825,10 @@ const loadAndSyncVueFlowGraph = async () => {
 
 const loadYamlFile = async () => {
   try {
-    if (!workflowName.value) {
+    if (!currentWorkflowName.value) {
       return
     }
-    const result = await fetchYaml(workflowName.value)
+    const result = await fetchYaml(currentWorkflowName.value)
 
     if (!result?.success) {
       console.error('Failed to load YAML file', result?.message || result?.detail)
@@ -888,6 +891,11 @@ const updateNodesAndEdgesFromYaml = (preserveExistingLayout = false) => {
 
     const currentNodes = nodes.value || []
     const currentEdges = edges.value || []
+    const defaultCenterPosition = getCentralPosition()
+    const getDefaultCenterPosition = () => ({
+      x: defaultCenterPosition.x,
+      y: defaultCenterPosition.y
+    })
 
     const existingNodeById = preserveExistingLayout
       ? new Map(currentNodes.map(node => [node.id, node]))
@@ -947,8 +955,9 @@ const updateNodesAndEdgesFromYaml = (preserveExistingLayout = false) => {
           }
         }
 
-        while (q.length) {
-          const id = q.shift()
+        let queueIndex = 0
+        while (queueIndex < q.length) {
+          const id = q[queueIndex++]
           const baseLevel = levelById.get(id) || 0
           const neighbors = adj.get(id) || new Set()
           for (const nb of neighbors) {
@@ -1033,7 +1042,7 @@ const updateNodesAndEdgesFromYaml = (preserveExistingLayout = false) => {
             }
           }
 
-          const pos = positions.get(id) || getCentralPosition()
+          const pos = positions.get(id) || getDefaultCenterPosition()
           return {
             id,
             type: 'workflow-node',
@@ -1051,7 +1060,7 @@ const updateNodesAndEdgesFromYaml = (preserveExistingLayout = false) => {
           id: yamlNode.id,
           type: 'workflow-node',
           label: yamlNode.id,
-          position: getCentralPosition(),
+          position: getDefaultCenterPosition(),
           data: yamlNode
         }))
         nodes.value = nextNodes
@@ -1097,13 +1106,13 @@ const updateNodesAndEdgesFromYaml = (preserveExistingLayout = false) => {
         // Place start node to the left of the leftmost column
         const yamlNodesInGraph = (nodes.value || []).filter(n => n && n.id !== START_NODE_ID)
         if (yamlNodesInGraph.length) {
-          const xs = yamlNodesInGraph.map(n => (n?.position && typeof n.position.x === 'number') ? n.position.x : getCentralPosition().x)
+          const xs = yamlNodesInGraph.map(n => (n?.position && typeof n.position.x === 'number') ? n.position.x : defaultCenterPosition.x)
           const minX = Math.min(...xs)
           // Find nodes in that left column
           const tol = 1
           const leftColumn = yamlNodesInGraph.filter(n => Math.abs((n?.position?.x || 0) - minX) <= tol)
-          const ys = leftColumn.map(n => (n?.position && typeof n.position.y === 'number') ? n.position.y : getCentralPosition().y)
-          const avgY = ys.length ? ys.reduce((a, b) => a + b, 0) / ys.length : getCentralPosition().y
+          const ys = leftColumn.map(n => (n?.position && typeof n.position.y === 'number') ? n.position.y : defaultCenterPosition.y)
+          const avgY = ys.length ? ys.reduce((a, b) => a + b, 0) / ys.length : defaultCenterPosition.y
           const startXOffset = -100
           const startYOffset = 80
           startNode = {
@@ -1118,7 +1127,7 @@ const updateNodesAndEdgesFromYaml = (preserveExistingLayout = false) => {
             id: START_NODE_ID,
             type: 'start-node',
             label: 'Start',
-            position: getCentralPosition(),
+            position: getDefaultCenterPosition(),
             data: { id: START_NODE_ID, label: 'Start' }
           }
         }
@@ -1128,7 +1137,7 @@ const updateNodesAndEdgesFromYaml = (preserveExistingLayout = false) => {
           id: START_NODE_ID,
           type: 'start-node',
           label: 'Start',
-          position: getCentralPosition(),
+          position: getDefaultCenterPosition(),
           data: { id: START_NODE_ID, label: 'Start' }
         }
       }
@@ -1167,13 +1176,14 @@ const updateNodesAndEdgesFromYaml = (preserveExistingLayout = false) => {
     }).filter(Boolean)
 
     // Combine YAML edges with visual start edges (preserve any existing non-yaml edges)
+    const nextYamlEdgeIdSet = new Set(nextYamlEdges.map(edge => edge.id))
     edges.value = [
       // keep any existing edges that are not YAML edges (e.g., visual-only) when preserving layout
       // but always exclude previous Start edges so they are replaced by the newly computed ones
       ...(preserveExistingLayout ? currentEdges.filter(e => {
         const k = `${e.source}-${e.target}`
         // drop if it's a YAML-defined edge or a previous Start edge
-        const isYamlEdge = nextYamlEdges.some(ne => ne.id === k)
+        const isYamlEdge = nextYamlEdgeIdSet.has(k)
         const isStartEdge = e.source === START_NODE_ID
         // Also drop if it looks like a YAML edge (has data.from/to) but isn't in nextYamlEdges (stale)
         const isStaleYamlEdge = e.data?.from && e.data?.to
@@ -1292,69 +1302,81 @@ const updateVueFlowNodeId = (oldId, newId) => {
 }
 
 // FormGenerator integration
-const snapshotYamlContent = () => cloneDeep(yamlContent.value ?? null)
-
-// Build YAML without specific node
+// Build YAML without specific node (shallow clone path to avoid full deep-clone on editor open)
 const buildYamlWithoutNode = (nodeId) => {
-  const snapshot = snapshotYamlContent()
-  if (!snapshot?.graph?.nodes || !Array.isArray(snapshot.graph.nodes)) {
-    return snapshot
+  const source = yamlContent.value
+  if (!source?.graph?.nodes || !Array.isArray(source.graph.nodes)) {
+    return source
   }
-  snapshot.graph.nodes = snapshot.graph.nodes.filter(node => node?.id !== nodeId)
-  return snapshot
+  return {
+    ...source,
+    graph: {
+      ...source.graph,
+      nodes: source.graph.nodes.filter(node => node?.id !== nodeId)
+    }
+  }
 }
 
 const buildYamlWithoutEdge = (fromId, toId) => {
-  const snapshot = snapshotYamlContent()
-  if (!snapshot?.graph?.edges || !Array.isArray(snapshot.graph.edges)) {
-    return snapshot
+  const source = yamlContent.value
+  if (!source?.graph?.edges || !Array.isArray(source.graph.edges)) {
+    return source
   }
   let removed = false
-  snapshot.graph.edges = snapshot.graph.edges.filter(edge => {
+  const filteredEdges = source.graph.edges.filter(edge => {
     if (!removed && edge?.from === fromId && edge?.to === toId) {
       removed = true
       return false
     }
     return true
   })
-  return snapshot
+  return {
+    ...source,
+    graph: {
+      ...source.graph,
+      edges: filteredEdges
+    }
+  }
 }
 
 const buildYamlWithoutVars = () => {
-  const snapshot = snapshotYamlContent()
-  if (!snapshot || typeof snapshot !== 'object') {
-    return snapshot
+  const source = yamlContent.value
+  if (!source || typeof source !== 'object') {
+    return source
   }
-  if (!Object.prototype.hasOwnProperty.call(snapshot, 'vars')) {
-    return snapshot
+  if (!Object.prototype.hasOwnProperty.call(source, 'vars')) {
+    return source
   }
-  const sanitized = { ...snapshot }
+  const sanitized = { ...source }
   delete sanitized.vars
   return sanitized
 }
 
 const buildYamlWithoutMemory = () => {
-  const snapshot = snapshotYamlContent()
-  if (!snapshot?.graph) {
-    return snapshot
+  const source = yamlContent.value
+  if (!source?.graph) {
+    return source
   }
-  if (Object.prototype.hasOwnProperty.call(snapshot.graph, 'memory')) {
-    const newGraph = { ...snapshot.graph }
+  if (Object.prototype.hasOwnProperty.call(source.graph, 'memory')) {
+    const newGraph = { ...source.graph }
     delete newGraph.memory
-    snapshot.graph = newGraph
+    return {
+      ...source,
+      graph: newGraph
+    }
   }
-  return snapshot
+  return source
 }
 
 const buildYamlWithoutGraph = () => {
-  const snapshot = snapshotYamlContent()
-  if (!snapshot || typeof snapshot !== 'object') {
-    return snapshot
+  const source = yamlContent.value
+  if (!source || typeof source !== 'object') {
+    return source
   }
-  if (!Object.prototype.hasOwnProperty.call(snapshot, 'graph')) {
-    return snapshot
+  if (!Object.prototype.hasOwnProperty.call(source, 'graph')) {
+    return source
   }
-  const sanitized = { ...snapshot }
+  const sanitized = { ...source }
   delete sanitized.graph
   return sanitized
 }
@@ -1362,17 +1384,18 @@ const buildYamlWithoutGraph = () => {
 const autoAddStartEdge = async (nextNodeId) => {
   const workflowNodes = (yamlContent.value?.graph?.nodes || []).filter(node => node?.id !== START_NODE_ID)
   if (workflowNodes.length === 1 && workflowNodes[0]?.id === nextNodeId) {
-    const snapshot = snapshotYamlContent()
-    if (!snapshot?.graph) {
-      snapshot.graph = {}
-    }
-    if (!Array.isArray(snapshot.graph.start)) {
-      snapshot.graph.start = []
-    }
-    if (!snapshot.graph.start.includes(nextNodeId)) {
-      // Add node
-      snapshot.graph.start.push(nextNodeId)
-      const ok = await persistYamlSnapshot(snapshot)
+    const source = yamlContent.value
+    const sourceGraph = source?.graph && typeof source.graph === 'object' ? source.graph : {}
+    const currentStart = Array.isArray(sourceGraph.start) ? sourceGraph.start : []
+    if (!currentStart.includes(nextNodeId)) {
+      const nextSnapshot = {
+        ...source,
+        graph: {
+          ...sourceGraph,
+          start: [...currentStart, nextNodeId]
+        }
+      }
+      const ok = await persistYamlSnapshot(nextSnapshot)
       if (ok) {
         await loadYamlFile()
         syncVueNodesAndEdgesData()
@@ -1398,12 +1421,10 @@ const openDynamicFormGenerator = (type, options = {}) => {
 
   const hasCustomYaml = Object.prototype.hasOwnProperty.call(options, 'initialYaml')
   const yamlSource = hasCustomYaml ? options.initialYaml : yamlContent.value
-  formGeneratorInitialYaml.value = yamlSource ? cloneDeep(yamlSource) : null
+  formGeneratorInitialYaml.value = yamlSource || null
 
   if (Object.prototype.hasOwnProperty.call(options, 'initialFormData')) {
-    formGeneratorInitialFormData.value = options.initialFormData
-      ? cloneDeep(options.initialFormData)
-      : null
+    formGeneratorInitialFormData.value = options.initialFormData || null
   } else {
     formGeneratorInitialFormData.value = null
   }
@@ -1632,25 +1653,30 @@ const onConnect = async (connection) => {
   // Special handling for StartNode connections
   if (connection.source === START_NODE_ID) {
     // Add target node to graph.start array instead of opening FormGenerator
-    const snapshot = snapshotYamlContent()
-    if (!snapshot?.graph) {
+    const source = yamlContent.value
+    if (!source?.graph) {
       setTimeout(() => {
         isCreatingConnection.value = false
       }, 10)
       return
     }
+    const sourceGraph = source.graph
 
     // Ensure graph.start exists as an array
-    if (!Array.isArray(snapshot.graph.start)) {
-      snapshot.graph.start = []
-    }
+    const currentStart = Array.isArray(sourceGraph.start) ? sourceGraph.start : []
 
     // Add target node to start array if not already present
-    if (!snapshot.graph.start.includes(connection.target)) {
-      snapshot.graph.start.push(connection.target)
+    if (!currentStart.includes(connection.target)) {
+      const nextSnapshot = {
+        ...source,
+        graph: {
+          ...sourceGraph,
+          start: [...currentStart, connection.target]
+        }
+      }
 
       // Persist the updated YAML
-      const ok = await persistYamlSnapshot(snapshot)
+      const ok = await persistYamlSnapshot(nextSnapshot)
       if (ok) {
         await loadYamlFile()
         syncVueNodesAndEdgesData()
@@ -1715,12 +1741,12 @@ const openCreateEdgeModal = () => {
 }
 
 const goToLaunch = () => {
-  if (!workflowName.value) {
+  if (!currentWorkflowName.value) {
     return
   }
-  const fileName = workflowName.value.endsWith('.yaml')
-    ? workflowName.value
-    : `${workflowName.value}.yaml`
+  const fileName = currentWorkflowName.value.endsWith('.yaml')
+    ? currentWorkflowName.value
+    : `${currentWorkflowName.value}.yaml`
 
   const resolved = router.resolve({
     path: '/launch',
@@ -1733,7 +1759,7 @@ const goToLaunch = () => {
 // Modal functions for rename and copy workflow
 const openRenameWorkflowModal = () => {
   showMenu.value = false
-  renameWorkflowName.value = workflowName.value.replace('.yaml', '')
+  renameWorkflowName.value = currentWorkflowName.value.replace('.yaml', '')
   showRenameModal.value = true
 }
 
@@ -1748,11 +1774,11 @@ const handleRenameSubmit = async () => {
   }
 
   const newName = renameWorkflowName.value.trim()
-  const result = await postYamlNameChange(workflowName.value, newName)
+  const result = await postYamlNameChange(currentWorkflowName.value, newName)
 
   if (result.success) {
     // Handle VueGraph rename
-    const oldWorkflowKey = workflowName.value.replace('.yaml', '')
+    const oldWorkflowKey = currentWorkflowName.value.replace('.yaml', '')
     const newWorkflowKey = newName
 
     // Save VueGraph into new workflow
@@ -1791,7 +1817,7 @@ const handleRenameSubmit = async () => {
 
 const openCopyWorkflowModal = () => {
   showMenu.value = false
-  copyWorkflowName.value = workflowName.value.replace('.yaml', '') + '_copy'
+  copyWorkflowName.value = currentWorkflowName.value.replace('.yaml', '') + '_copy'
   showCopyModal.value = true
 }
 
@@ -1806,11 +1832,11 @@ const handleCopySubmit = async () => {
   }
 
   const newName = copyWorkflowName.value.trim()
-  const result = await postYamlCopy(workflowName.value, newName)
+  const result = await postYamlCopy(currentWorkflowName.value, newName)
 
   if (result.success) {
     // Handle VueGraph copy
-    const sourceWorkflowKey = workflowName.value.replace('.yaml', '')
+    const sourceWorkflowKey = currentWorkflowName.value.replace('.yaml', '')
     const targetWorkflowKey = newName
 
     try {
