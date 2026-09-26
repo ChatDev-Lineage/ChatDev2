@@ -1,0 +1,65 @@
+{
+  "schema": "kilo.chatdev.game-portfolio/v1",
+  "projects": [
+    {
+      "id": "project-144",
+      "repo": "KiloMusician/project-144",
+      "engine": "python/reference-sim + game runtime",
+      "priority": "P0",
+      "harvest_role": "simulation + agent-native CLI exemplar",
+      "path_env": "PROJECT_144_ROOT",
+      "local_candidates": ["{ACTIVE_ROOT}\\project-144", "C:\\dev\\project-144"],
+      "semantic_cli": "tools/p144.py --json",
+      "native_checks": ["python tools/p144.py --help", "python -m unittest discover"],
+      "chatdev_roles": ["systems-designer", "simulation-programmer", "test-engineer", "content-designer"]
+    },
+    {
+      "id": "ash-and-anvil",
+      "repo": "KiloMusician/Ash-and-Anvil",
+      "engine": "Godot",
+      "priority": "P0",
+      "harvest_role": "large RPG + persistent provenance + player-agent protocol",
+      "path_env": "ASH_ANVIL_ROOT",
+      "local_candidates": ["{ACTIVE_ROOT}\\Ash-and-Anvil", "C:\\dev\\Ash-and-Anvil"],
+      "semantic_cli": null,
+      "native_checks": ["godot --headless --path . --quit"],
+      "chatdev_roles": ["gameplay-programmer", "systems-designer", "content-designer", "test-engineer"]
+    },
+    {
+      "id": "furyline",
+      "repo": "KiloMusician/Furyline",
+      "engine": "Godot",
+      "priority": "P1",
+      "harvest_role": "deterministic terrain + missions + procedural audio",
+      "path_env": "FURYLINE_ROOT",
+      "local_candidates": ["{ACTIVE_ROOT}\\Furyline", "C:\\dev\\Furyline"],
+      "semantic_cli": null,
+      "native_checks": ["godot --headless --path . --quit"],
+      "chatdev_roles": ["gameplay-programmer", "mission-designer", "audio-systems", "test-engineer"]
+    },
+    {
+      "id": "player-two",
+      "repo": "KiloMusician/Player-Two",
+      "engine": "python/emulator tooling",
+      "priority": "P0",
+      "harvest_role": "training/orchestration brain + GAL provenance exemplar",
+      "path_env": "PLAYER_TWO_ROOT",
+      "local_candidates": ["{ACTIVE_ROOT}\\Player-Two", "C:\\dev\\Player-Two"],
+      "semantic_cli": null,
+      "native_checks": ["python -m unittest discover"],
+      "chatdev_roles": ["agent-engineer", "training-engineer", "telemetry-engineer", "test-engineer"]
+    },
+    {
+      "id": "game-archaeology-lab",
+      "repo": "KiloMusician/GameArchaeologyLab",
+      "engine": "emulator/research lab",
+      "priority": "P1",
+      "harvest_role": "instrumentation + capture + memory/state hunting",
+      "path_env": "GAL_ROOT",
+      "local_candidates": ["{ACTIVE_ROOT}\\GameArchaeologyLab", "C:\\GameArchaeologyLab"],
+      "semantic_cli": null,
+      "native_checks": [],
+      "chatdev_roles": ["investigator", "instrumentation-engineer", "agent-engineer"]
+    }
+  ]
+}
