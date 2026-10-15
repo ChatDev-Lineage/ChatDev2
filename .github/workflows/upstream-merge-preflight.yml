@@ -1,0 +1,48 @@
+name: Upstream ChatDev merge preflight (read only)
+on:
+  pull_request:
+    paths:
+      - "tools/fork_merge_probe.py"
+      - "tests/test_fork_merge_probe.py"
+      - ".github/workflows/upstream-merge-preflight.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  upstream-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Regression-test clean, conflicting and identical ancestry
+        run: python -m unittest discover -s tests -p 'test_fork_merge_probe.py' -v
+      - name: Fetch public upstream code without checking out or executing it
+        shell: bash
+        run: |
+          set -euo pipefail
+          git remote add upstream https://github.com/OpenBMB/ChatDev.git
+          git -c protocol.version=2 fetch --no-tags --filter=blob:none upstream \
+            refs/heads/main:refs/remotes/upstream/main
+          echo "upstream_head=$(git rev-parse refs/remotes/upstream/main)" >> "$GITHUB_STEP_SUMMARY"
+      - name: Attempt disposable Git merge-tree and write receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/fork_merge_probe.py --fork HEAD \
+            --upstream refs/remotes/upstream/main --output "$RUNNER_TEMP/fork-sync"
+      - name: Retain exact merge and overlap evidence, including failed checks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chatdev2-upstream-fork-preflight
+          path: ${{ runner.temp }}/fork-sync/
+          if-no-files-found: warn
+          retention-days: 7
